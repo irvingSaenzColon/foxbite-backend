@@ -5,7 +5,7 @@ include_once '../../configuration/DataBaseHelper.php';
  class CourseDAO implements CourseCRUD{
 
     public function selectAll(){
-        $query = "CALL sp_basic_course_crud(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        $query = "CALL sp_basic_course_crud(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -13,7 +13,7 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( null, null, null, null, null, null, null, null, null, 'A') );
+            $statement->execute(array( 0, null, null, null, null, null, null, null, null, null, 'A') );
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         }
@@ -117,7 +117,7 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( 0, $course->getTitle(), $course->getDescription(), $course->getPrice(), $course->getChapters(), $course->getCover(), $course->getCoverExtension(), $course->getVisible(), '1996-04-20', $course->getCraetedBy(), 'I') );
+            $statement->execute(array( $course->getId(), $course->getTitle(), $course->getDescription(), $course->getPrice(), $course->getChapters(), $course->getCover(), $course->getCoverExtension(), $course->getVisible(), $course->getUpdatedAt(), $course->getCraetedBy(), 'I') );
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
         }

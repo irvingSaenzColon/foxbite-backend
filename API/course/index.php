@@ -18,9 +18,12 @@ $dotenv = Dotenv\Dotenv::createImmutable('../../');
 $router = new Router(new Request);
 
 $router->get('/course', function() {
-  
-  http_response_code(200);
-  return json_encode('Haciendo get de cursos');
+  $courseDAO = new CourseDAO();
+
+  $response = $courseDAO->selectAll();
+
+  http_response_code($response['status']);
+  return json_encode($response);
 });
 
 $router->get('/course/?', function($request) {
@@ -50,7 +53,7 @@ $router->post('/course', function($request) {
   preg_match("/\/(.*?);/", $body['cover'], $matches);
   $coverImage = base64_encode($data);
 
-  $course = new Course(0, $body['title'], $body['description'], $body['price'], 0, $coverImage, $matches[1], $body['status'], null, null, $body['createdBy'] );
+  $course = new Course(0, $body['title'], $body['description'], floatval($body['price']), 0, $coverImage, $matches[1], $body['status'], null, null, $body['createdBy'] );
   $response = $courseDAO->insertCourse($course);
 
   http_response_code($response['status']);
