@@ -1,10 +1,11 @@
 <?php
-include_once '../../interface/UserCRUD.php';
+include_once '../../interface/CategoryCRUD.php';
 include_once '../../configuration/DataBaseHelper.php';
 
- class UserDAO implements UserCRUD{
+ class CategoryDAO implements CategoryCRUD{
+
     public function selectAll(){
-        $query = "CALL sp_basic_user_crud(?, ?, ?, ?, ?, ? ,? ,? ,?, ?, ?, ?, ?, ?);";
+        $query = "CALL sp_basic_category_crud( ?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -12,109 +13,7 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( 0, '', '', '', '', '', '', '', '', '', '1999-04-02', null, null, 'O') );
-            $result = $statement->fetch(PDO::FETCH_ASSOC);
-
-        }
-        catch(PDOException $error){
-            $connection->closeConnection();
-            $con = null;
-
-            return array(
-                'body' => '',
-                'message' => 'Hubo un error durante la conexión '.$error,
-                'status' => 500
-            );
-        }
-        finally{
-            $connection->closeConnection();
-            $con = null;
-
-            return array(
-                'body' => $result,
-                'message' => '',
-                'status' => 200
-            );
-        }
-    }
-    public function selectUser(int $idParam){
-        $query = "CALL sp_basic_user_crud(?, ?, ?, ?, ?, ? ,? ,? ,?, ?, ?, ?, ?, ?);";
-        $result = [];
-        try{
-            $connection = new DataBaseHelper();
-            $con = $connection->getConnection();
-
-            $statement = $con->prepare($query);
-
-            $statement->execute(array( $idParam, null, null, null, null, null, null, null, null, null, '1999-04-16', null, null, 'S') );
-            $result = $statement->fetch(PDO::FETCH_ASSOC);
-
-        }
-        catch(PDOException $error){
-            $connection->closeConnection();
-            $con = null;
-
-            return array(
-                'body' => '',
-                'message' => 'Hubo un error durante la conexión '.$error,
-                'status' => 500
-            );
-        }
-        finally{
-            $connection->closeConnection();
-            $con = null;
-
-            return array(
-                'body' => $result,
-                'message' => '',
-                'status' => 200
-            );
-        }
-    }
-    public function selectAuthUser(string $email){
-        $query = "CALL sp_basic_user_crud(?, ?, ?, ?, ?, ? ,? ,? ,?, ?, ?, ?, ?, ?);";
-        $result = [];
-        try{
-            $connection = new DataBaseHelper();
-            $con = $connection->getConnection();
-
-            $statement = $con->prepare($query);
-
-            $statement->execute(array( null, null, null, null, null, $email, null, null, null, null, null, null, null, 'A') );
-            $result = $statement->fetch(PDO::FETCH_ASSOC);
-
-        }
-        catch(PDOException $error){
-            $connection->closeConnection();
-            $con = null;
-
-            return array(
-                'body' => '',
-                'message' => 'Hubo un error durante la conexión '.$error,
-                'status' => 500
-            );
-        }
-        finally{
-            $connection->closeConnection();
-            $con = null;
-
-            return array(
-                'body' => $result,
-                'message' => '',
-                'status' => 200
-            );
-        }
-    }
-    public function insertUser(User $userParam){
-        $query = "CALL sp_basic_user_crud(?, ?, ?, ?, ?, ? ,? ,? ,?, ?, ?, ?, ?, ?);";
-        $result = [];
-        try{
-            $connection = new DataBaseHelper();
-            $con = $connection->getConnection();
-
-            $statement = $con->prepare($query);
-
-            $statement->execute(array( $userParam->getId(), $userParam->getName(), $userParam->getLastnameP(), $userParam->getLastNameM(), $userParam->getRol(), $userParam->getEmail(), $userParam->getPassword(), $userParam->getNickname(), $userParam->getStatus(), $userParam->getGender(), $userParam->getBirthdate(), $userParam->getProfileImage(), $userParam->getExtensionImage(), 'I') );
+            $statement->execute(array( 0, null, null, null, null, null, 'A') );
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         }
@@ -139,8 +38,8 @@ include_once '../../configuration/DataBaseHelper.php';
             );
         }
     }
-    public function updateUser(User $userParam, string $option){
-        $query = "CALL sp_basic_user_crud(?, ?, ?, ?, ?, ? ,? ,? ,?, ?, ?, ?, ?, ?);";
+    public function selectCategory(int $id){
+        $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -148,7 +47,7 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( $userParam->getId(), $userParam->getName(), $userParam->getLastnameP(), $userParam->getLastNameM(), $userParam->getRol(), $userParam->getEmail(), $userParam->getPassword(), $userParam->getNickname(), $userParam->getStatus(), $userParam->getGender(), $userParam->getBirthdate(), $userParam->getProfileImage(), $userParam->getExtensionImage(), $option) );
+            $statement->execute(array( null, null, null, null, null, null, 'S') );
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
         }
@@ -173,8 +72,9 @@ include_once '../../configuration/DataBaseHelper.php';
             );
         }
     }
-    public function deleteUser(User $userParam){
-        $query = "CALL sp_basic_user_crud(?, ?, ?, ?, ?, ? ,? ,? ,?, ?, ?, ?, ?, ?);";
+
+    public function selectCategoryFromUser(Category $Category){
+        $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -182,7 +82,110 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( $userParam->getId(), null, null, null, null, null, null, null, null, null, null, null, null, 'D') );
+            $statement->execute(array( null, null, null, null, null, null, 'S') );
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        }
+        catch(PDOException $error){
+            $connection->closeConnection();
+            $con = null;
+
+            return array(
+                'body' => '',
+                'message' => 'Hubo un error durante la conexión '.$error,
+                'status' => 500
+            );
+        }
+        finally{
+            $connection->closeConnection();
+            $con = null;
+
+            return array(
+                'body' => $result,
+                'message' => '',
+                'status' => 200
+            );
+        }
+    }
+
+    public function insertCategory(Category $category){
+        $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
+        $result = [];
+        try{
+            $connection = new DataBaseHelper();
+            $con = $connection->getConnection();
+
+            $statement = $con->prepare($query);
+
+            $statement->execute(array( 0, $category->getTitle(), $category->getDescription(), $category->getCover(), $category->getExtension(), $category->getCreatedBy(), 'I') );
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        }
+        catch(PDOException $error){
+            $connection->closeConnection();
+            $con = null;
+
+            return array(
+                'body' => '',
+                'message' => 'Hubo un error durante la conexión '.$error,
+                'status' => 500
+            );
+        }
+        finally{
+            $connection->closeConnection();
+            $con = null;
+
+            return array(
+                'body' => $result,
+                'message' => '',
+                'status' => 200
+            );
+        }
+    }
+    public function updateCategory(Category $Category, string $option){
+        $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
+        $result = [];
+        try{
+            $connection = new DataBaseHelper();
+            $con = $connection->getConnection();
+
+            $statement = $con->prepare($query);
+
+            $statement->execute(array( null, null, null, null, null, null, 'S') );
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        }
+        catch(PDOException $error){
+            $connection->closeConnection();
+            $con = null;
+
+            return array(
+                'body' => '',
+                'message' => 'Hubo un error durante la conexión '.$error,
+                'status' => 500
+            );
+        }
+        finally{
+            $connection->closeConnection();
+            $con = null;
+
+            return array(
+                'body' => $result,
+                'message' => '',
+                'status' => 200
+            );
+        }
+    }
+    public function deleteCategory(Category $Category){
+        $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
+        $result = [];
+        try{
+            $connection = new DataBaseHelper();
+            $con = $connection->getConnection();
+
+            $statement = $con->prepare($query);
+
+            $statement->execute(array( null, null, null, null, null, null, 'S') );
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
         }

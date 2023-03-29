@@ -76,9 +76,28 @@ $router->post('/user', function($request) {
 
 $router->put('/user', function($request) {
   $body = $request->getBody();
+  $userDAO = new UserDAO();
+  $user = null;
 
-  
-  return json_encode('');
+  if($body['option'] === 'U'){
+    $user = new User($body['userId'], $body['userName'], $body['userLastnameP'], $body['userLastnameM'], null, null, null, $body['userNickname'], $body['userStatus'], $body['userGender'], $body['userBirthdate'], null, null);
+
+    $userDAO->updateUser($user, 'U');
+  }
+  else if($body['option'] === 'M'){
+    list($type, $data) = explode(';', $body['userProfile']);
+    preg_match("/\/(.*?);/", $body['userProfile'], $matches);
+    $profileImage = base64_encode($data);
+
+    $user = new User($body['userId'], null, null, null, null, null, null, null, null, null, null, $profileImage, $matches[1]);
+    $userDAO->updateUser($user, 'M');
+
+    return json_encode(array(
+      'image' => $body['userProfile']
+    ));
+  }
+
+  return json_encode('Hola');
 });
 
 $router->patch('/user/', function($request) {
@@ -98,8 +117,16 @@ $router->delete('/user/?', function($request) {
   return json_encode($idMatch[0]);
 });
 
-$router->delete('/user', function($request) {
-  return json_encode('');
+$router->delete('/user/?', function($request) {
+  $idPattern = '/[0-9]+$/';
+  preg_match($idPattern, $request->requestUri, $idMatch);
+
+  $userDAO = new UserDAO();
+  $user = new User($idMatch[0], null, null, null, null, null, null, null, null, null, null, null, null);
+  
+  $userDAO->deleteUser($user);
+
+  return json_encode($idMatch[0]);
 });
 
 $router->options('/user/?', function($request) {
