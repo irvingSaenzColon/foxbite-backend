@@ -22,17 +22,32 @@ $router->get('/course', function() {
 
   $response = $courseDAO->selectAll();
 
+  $currentCourseData = [];
+
+  foreach($response['body'] as $courseData){
+    $courseData['course_cover'] = base64_decode($courseData['course_cover']);
+    array_push($currentCourseData, $courseData);
+  }
+
+  $response['body'] = $currentCourseData;
+
   http_response_code($response['status']);
   return json_encode($response);
 });
 
-$router->get('/course/?', function($request) {
+$router->get('/course/?', function($request) { 
   $idPattern = '/[0-9]+$/';
 
   preg_match($idPattern, $request->requestUri, $idMatch);
 
-  http_response_code(200);
-  return json_encode( $idMatch[1] );
+ $courseDAO = new CourseDAO();
+
+  $response = $courseDAO->selectCourse($idMatch[0]);
+
+  $response['body']['course_cover'] = base64_decode($response['body']['course_cover']);
+
+  http_response_code($response['status']);
+  return json_encode($response);
 });
 
 $router->get('/course/user/?', function($request) {

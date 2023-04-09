@@ -15,7 +15,6 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement->execute(array( 0, null, null, null, null, null, null, null, null, null, 'A') );
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-
         }
         catch(PDOException $error){
             $connection->closeConnection();
@@ -39,7 +38,7 @@ include_once '../../configuration/DataBaseHelper.php';
         }
     }
     public function selectCourse(int $id){
-        $query = "CALL sp_basic_course_crud(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        $query = "CALL sp_basic_course_crud(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -47,7 +46,7 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( null, null, null, null, null, null, null, null, null, 'S') );
+            $statement->execute(array( $id, null, null, null, null, null, null, null, null, null, 'S') );
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
         }
