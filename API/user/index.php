@@ -96,8 +96,23 @@ $router->put('/user', function($request) {
       'image' => $body['userProfile']
     ));
   }
+  else if($body['option'] === 'C'){
 
-  return json_encode('Hola');
+    $user = new User($body['userId'], null, null, null, null, $body['userEmail'], $body['userPassword'], null, null, null, null, null, null);
+
+    $response = $userDAO->selectAuthUser($user->getEmail());
+    $credentials = $response['body'];
+
+    if($credentials['user_password'] != $user->getPassword()){
+        $response['body'] = true;  
+      return json_encode($response);        
+    }
+
+    $user->setPassword($body['userNewPassword']);
+    $response = $userDAO->updateUser($user, 'C');
+
+    return json_encode($response);
+  }
 });
 
 $router->patch('/user/', function($request) {
