@@ -90,14 +90,17 @@ $router->delete('/category/?', function($request) {
 
   preg_match($idPattern, $request->requestUri, $idMatch);
 
-  return json_encode('');
+  $categoryDAO = new CategoryDAO();
+  $category = new Category($idMatch[0], null, null, null, null, null);
+  
+  $categoryDAO->deleteCategory($category);
 
   http_response_code(200);
   return json_encode($idMatch[0]);
 });
 
 $router->delete('/category', function($request) {
-  return json_encode('');
+  return json_encode('eliminando jeje');
 });
 
 $router->options('/category/?', function($request) {

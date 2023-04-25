@@ -176,7 +176,7 @@ include_once '../../configuration/DataBaseHelper.php';
             );
         }
     }
-    public function deleteCategory(Category $Category){
+    public function deleteCategory(Category $category){
         $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
@@ -185,7 +185,7 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( null, null, null, null, null, null, 'S') );
+            $statement->execute(array( $category->getId(), null, null, null, null, null, 'D') );
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
         }
