@@ -12,7 +12,7 @@ include_once('../../model/Router.php');
 include_once('../../dao/UserDAO.php');
 
 $dotenv = Dotenv\Dotenv::createImmutable('../../');
-  $dotenv->safeLoad();
+$dotenv->safeLoad();
  
 
 $router = new Router(new Request);

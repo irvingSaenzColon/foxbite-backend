@@ -63,7 +63,7 @@ $router->post('/course', function($request) {
 
   $body = $request->getBody();
   $courseDAO = new CourseDAO();
-  $body['status'] = $body['status'] === 'active' ? true : false;
+  $body['status'] = $body['status'] === 'active' ? 1 : 0;
   list($type, $data) = explode(';', $body['cover']);
   preg_match("/\/(.*?);/", $body['cover'], $matches);
   $coverImage = base64_encode($data);

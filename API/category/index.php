@@ -21,6 +21,15 @@ $router->get('/category', function() {
     $cateoryDAO = new CategoryDAO();
     $response = $cateoryDAO->selectAll();
 
+    $curenCategoryData = [];
+
+    foreach($response['body'] as $categoryData){
+      $categoryData['category_cover'] = base64_decode($categoryData['category_cover']);
+      array_push($curenCategoryData, $categoryData);
+    }
+
+    $response['body'] = $curenCategoryData;
+
   http_response_code($response['status']);
   return json_encode($response);
 });
@@ -33,6 +42,8 @@ $router->get('/category/?', function($request) {
   $category = new Category(intval($idMatch), null, null, null, null, null);
 
   $response = $cateoryDAO->selectCategory($category->getId());
+
+  //$response['body']['category_cover'] = base64_decode($response['body']['category_cover']);
 
   http_response_code($response['status']);
   return json_encode( $response );
@@ -66,7 +77,11 @@ $router->post('/category', function($request) {
   $cateoryDAO = new CategoryDAO();
 
   $category = new Category(0, $body['categoryTitle'], $body['categoryDescription'], $coverImage, $matches[1], $body['categoryCreatedBy']);
-  $response = $cateoryDAO->insertCategory($category);
+  $cateoryDAO->insertCategory($category);
+
+  $response = $cateoryDAO->selectLastCategoryCreatedBy($category->getCreatedBy());
+
+  $response['body']['category_cover'] = base64_decode($response['body']['category_cover']);
   
   http_response_code($response['status']);
   return json_encode($response);
