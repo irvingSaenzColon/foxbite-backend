@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, PATCH, DELETE");
 header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 header('Content-Type: application/json; charset=utf-8');
 
@@ -39,11 +39,11 @@ $router->get('/category/?', function($request) {
   preg_match($idPattern, $request->requestUri, $idMatch);
 
   $cateoryDAO = new CategoryDAO();
-  $category = new Category(intval($idMatch), null, null, null, null, null);
+  $category = new Category(intval($idMatch[0]), null, null, null, null, null);
 
   $response = $cateoryDAO->selectCategory($category->getId());
 
-  //$response['body']['category_cover'] = base64_decode($response['body']['category_cover']);
+  $response['body']['category_cover'] = base64_decode($response['body']['category_cover']);
 
   http_response_code($response['status']);
   return json_encode( $response );
@@ -95,9 +95,23 @@ $router->put('/category', function($request) {
 });
 
 $router->patch('/category', function($request) {
+  $body = $request->getBody();
+  list($type, $data) = explode(';', $body['categoryCover']);
+  preg_match("/\/(.*?);/", $body['categoryCover'], $matches);
+  $coverImage = base64_encode($data);
+
+  $categoryDAO = new CategoryDAO();
+
+  $category = new Category($body['categoryId'], $body['categoryTitle'], $body['categoryDescription'], $coverImage, $matches[1], $body['categoryCreatedBy']);
+
+  $categoryDAO->updateCategory($category, $body['option']);
+
+  $response = $categoryDAO->selectCategory($category->getId());
+
+  $response['body']['category_cover'] = base64_decode($response['body']['category_cover']);
 
   http_response_code(200);
-  return json_encode('Hola, amigo, estas llamando el metodo patch');
+  return json_encode($response);
 });
 
 $router->delete('/category/?', function($request) {

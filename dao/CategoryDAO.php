@@ -177,7 +177,7 @@ include_once '../../configuration/DataBaseHelper.php';
             );
         }
     }
-    public function updateCategory(Category $Category, string $option){
+    public function updateCategory(Category $category, string $option){
         $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
@@ -186,7 +186,7 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( null, null, null, null, null, null, 'S') );
+            $statement->execute(array( $category->getId(), $category->getTitle(), $category->getDescription(), $category->getCover(), $category->getExtension(), $category->getCreatedBy(), $option) );
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
         }
