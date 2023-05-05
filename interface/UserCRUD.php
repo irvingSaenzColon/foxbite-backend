@@ -8,5 +8,7 @@ interface UserCRUD{
     public function insertUser(User $userParam);
     public function updateUser(User $userParam, string $option);
     public function deleteUser(User $userParam);
+
+    public function selectUserInstructors();
 }
 ?>

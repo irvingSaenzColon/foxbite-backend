@@ -9,6 +9,7 @@ require '../../vendor/autoload.php';
 
 include_once('../../model/Request.php');
 include_once('../../model/Router.php');
+include_once('../../model/Course.php');
 include_once('../../dao/CategoryDAO.php');
 
 $dotenv = Dotenv\Dotenv::createImmutable('../../');
@@ -62,9 +63,15 @@ $router->get('/category/course/?', function($request) {
     $idPattern = '/[0-9]+$/';
   
     preg_match($idPattern, $request->requestUri, $idMatch);
+
+    $course = new Course($idMatch[0], null, null, null, null, null, null, null, null, null, null);
+
+    $categoryDAO = new CategoryDAO();
+    $response = $categoryDAO->selectCategoriesFromCourse($course);
+
   
-    http_response_code(200);
-    return json_encode( $idMatch[1] );
+    http_response_code($response['status']);
+    return json_encode($response);
   });
 
 $router->post('/category', function($request) {

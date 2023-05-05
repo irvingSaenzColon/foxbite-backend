@@ -9,5 +9,7 @@ interface CategoryCRUD{
     public function insertCategory(Category $category);
     public function updateCategory(Category $category, string $option);
     public function deleteCategory(Category $category);
+
+    public function selectCategoriesFromCourse(Course $course);
 }
 ?>

@@ -67,7 +67,13 @@ class Router
     preg_match($root, $route, $rootMatches);
     preg_match($some, $route, $someMatches);
 
-    if(sizeof($someMatches) > 0){
+    $letter = str_replace($rootMatches[0],"", $route);
+    
+    if(strlen($letter) == 0){
+      
+      $route = $rootMatches[2];
+    }
+    else if(sizeof($someMatches) > 0){
         $extra = '/[0-9]+/';
         
         preg_match($extra, $someMatches[0], $extraMatches);
@@ -82,7 +88,7 @@ class Router
         return [ $originalRoute, $route ];
     }
     else if(sizeof($rootMatches) > 2){
-       $route = $rootMatches[2];
+       $route = str_replace('/API', '', $route);
     }
     else if(substr_count($route, '/') > 2){
       $position = strrpos($route, '/');
@@ -113,12 +119,13 @@ class Router
     $methodDictionary = $this->{strtolower($this->request->requestMethod)};
     $formatedRoute = $this->fomatInputRoute($this->request->requestUri);
     if(!isset($methodDictionary[ $formatedRoute[0] ])){
+      
       echo json_encode($formatedRoute);
       $this->defaultRequestHandler();
       
       http_response_code(404);
       echo json_encode('404 NOT FOUND');
-      return;
+      return json_encode($methodDictionary);
     }
     
     $method = $methodDictionary[ $formatedRoute[0] ];

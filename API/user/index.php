@@ -28,6 +28,16 @@ $router->get('/user', function() {
   return json_encode($response);
 });
 
+$router->get('/user/instructors', function() {
+
+  $userDAO = new UserDAO();
+
+  $response = $userDAO->selectUserInstructors();
+
+  http_response_code($response['status']);
+  return json_encode($response);
+});
+
 $router->get('/user/?', function($request) {
   $idPattern = '/[0-9]+$/';
 
