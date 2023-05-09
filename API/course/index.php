@@ -74,6 +74,25 @@ $router->get('/course/user/?', function($request) {
   return json_encode($response);
 });
 
+$router->get('/course/latest', function($request) {
+
+  $courseDAO = new CourseDAO();
+
+  $response = $courseDAO->selectLatestCourses();
+
+  $currentCourseData = [];
+
+  foreach($response['body'] as $courseData){
+    $courseData['cover'] = base64_decode($courseData['cover']);
+    array_push($currentCourseData, $courseData);
+  }
+
+  $response['body'] = $currentCourseData;
+
+  http_response_code($response['status']);
+  return json_encode($response);
+});
+
 $router->post('/course', function($request) {
 
   $body = $request->getBody();

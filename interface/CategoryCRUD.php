@@ -11,5 +11,6 @@ interface CategoryCRUD{
     public function deleteCategory(Category $category);
 
     public function selectCategoriesFromCourse(Course $course);
+    public function selectCategoriesInfo();
 }
 ?>

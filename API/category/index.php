@@ -72,11 +72,30 @@ $router->get('/category/course/?', function($request) {
   
     http_response_code($response['status']);
     return json_encode($response);
-  });
+});
+
+$router->get('/category/info', function($request) {
+
+  $categoryDAO = new CategoryDAO();
+  $response = $categoryDAO->selectCategoriesInfo();
+
+  $curenCategoryData = [];
+
+  foreach($response['body'] as $categoryData){
+    $categoryData['cover'] = base64_decode($categoryData['cover']);
+    array_push($curenCategoryData, $categoryData);
+  }
+
+  $response['body'] = $curenCategoryData;
+
+  http_response_code($response['status']);
+  return json_encode($response);
+});
 
 $router->post('/category', function($request) {
 
   $body = $request->getBody();
+
   list($type, $data) = explode(';', $body['categoryCover']);
   preg_match("/\/(.*?);/", $body['categoryCover'], $matches);
   $coverImage = base64_encode($data);

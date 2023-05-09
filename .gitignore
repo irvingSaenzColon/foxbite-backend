@@ -1,0 +1,5 @@
+.env
+vendor/
+composer.json
+comporse.lock
+test.php
