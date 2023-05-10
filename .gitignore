@@ -1,5 +1,8 @@
 .env
 vendor/
+files/
+files/documents
+files/videos
 composer.json
 comporse.lock
 test.php
