@@ -70,21 +70,23 @@ class FileHandler{
         $fileData =  $this->base64DecodeFile($fileBase64);
         $extension = $this->getExtensionFromMime($fileData['mime']);
         if(strcmp($extension, "") !== 0){
-            $filename = uniqid("FILE-", true);
-            $serverPath = $serverPath.$filename.".".$extension;
+            $filename = uniqid("FILE-", true).".".$extension;
+            $serverPath = $serverPath.$filename;
             $trg = fopen($serverPath, 'w');
             fwrite($trg, $fileData['data']);
             fclose($trg);
 
             return [
                 "serverPath" => "http://localhost:8080/files/documents/".$filename,
-                "extension"  => $extension
+                "extension"  => $extension,
+                "serverName" => $filename
             ];
         }
 
         return[
             "server_path" => null,
-            "extension"  => null
+            "extension"  => null,
+            "serverName" => null
         ]; 
     }
 
@@ -98,7 +100,8 @@ class FileHandler{
         if(move_uploaded_file($videoLocation, $videoServerPath)){
             return [
                 "name"=>$videoServerName,
-                "extension" => $videoExtension
+                "extension" => $videoExtension,
+                "serverName" => $videoServerName
             ];
         }
 

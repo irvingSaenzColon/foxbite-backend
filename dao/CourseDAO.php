@@ -350,6 +350,41 @@ include_once '../../configuration/DataBaseHelper.php';
             );
         }
     }
+
+    public function selectBestCourses(){
+        $query = "CALL sp_basic_course_crud(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        $result = [];
+        try{
+            $connection = new DataBaseHelper();
+            $con = $connection->getConnection();
+
+            $statement = $con->prepare($query);
+
+            $statement->execute(array( null, null, null, null, null, null, null, null, null, null, 'P') );
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        }
+        catch(PDOException $error){
+            $connection->closeConnection();
+            $con = null;
+
+            return array(
+                'body' => '',
+                'message' => 'Hubo un error durante la conexión '.$error,
+                'status' => 500
+            );
+        }
+        finally{
+            $connection->closeConnection();
+            $con = null;
+
+            return array(
+                'body' => $result,
+                'message' => '',
+                'status' => 200
+            );
+        }
+    }
  }
 
  ?>

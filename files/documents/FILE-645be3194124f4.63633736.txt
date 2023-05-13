@@ -1,5 +1,0 @@
-BDM - 	Terminar la creación de capítulos		-falta
-PSM - 	Registro e inicio de sesión			-falta
-OVP - 	Terminar la inteligencia artificial		-falta
-GCW - 	Terminar animaciones de jugador y hacer		-falta
-	jugabilidad de nivel 1

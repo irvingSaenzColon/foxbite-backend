@@ -14,5 +14,6 @@ interface CourseCRUD{
     public function bindCategoryWithCourse(int $id, Course $course, Category $category, string $option);
     public function selectCourseAdvanced($title, $category, $teacher, $beginDate, $endDate);
     public function selectLatestCourses();
+    public function selectBestCourses();
 }
 ?>
