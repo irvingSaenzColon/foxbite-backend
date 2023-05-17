@@ -93,6 +93,25 @@ $router->get('/course/latest', function($request) {
   return json_encode($response);
 });
 
+$router->get('/course/best', function($request) {
+
+  $courseDAO = new CourseDAO();
+
+  $response = $courseDAO->selectBestCourses();
+
+  $currentCourseData = [];
+
+  foreach($response['body'] as $courseData){
+    $courseData['cover'] = base64_decode($courseData['cover']);
+    array_push($currentCourseData, $courseData);
+  }
+
+  $response['body'] = $currentCourseData;
+
+  http_response_code($response['status']);
+  return json_encode($response);
+});
+
 $router->post('/course', function($request) {
 
   $body = $request->getBody();
@@ -185,6 +204,29 @@ $router->delete('/course/?', function($request) {
   $course = new Course($idMatch[0], null, null, null, 0, null, null, null, null, null, null );
 
   $courseDAO = new CourseDAO();
+
+  $realPath = '';
+  $courseFiles = $courseDAO->selectCourseFiles($course)['body'];
+  
+  $realPath = '';
+  if(!empty($courseFiles)){
+    foreach($courseFiles as $chapterFile){
+      $realPath= 'files/documents/'.$chapterFile['server_name'];
+      if(file_exists($realPath))
+        unlink($realPath);
+    }
+  }
+
+  $courseVideos = $courseDAO->selectCourseVideos($course)['body'];
+  $realPath = '';
+  if(!empty($courseVideos)){
+    foreach($courseVideos as $chapterVideo){
+      $realPath = 'files/videos/'.$chapterVideo['server_name'];
+      if(file_exists($realPath))
+        unlink($realPath);
+    }
+  }
+
   $response = $courseDAO->deleteCourse($course);
   
 

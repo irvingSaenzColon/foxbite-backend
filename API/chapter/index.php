@@ -37,6 +37,19 @@ $router->get('/chapter/course/?', function($request) {
     return json_encode($response);
 });
 
+$router->get('/chapter/best', function() {
+
+  $response = [];
+
+  $chapter = new Chapter(null, null, null, null, null, null, null, null, null);
+  $chapterDao = new ChapterDAO();
+
+  $response = $chapterDao->selectAll($chapter);
+
+  http_response_code($response['status']);
+  return json_encode($response);
+});
+
 $router->get('/chapter/?', function($request) { 
   $idPattern = '/[0-9]+$/';
 
@@ -263,11 +276,10 @@ $router->delete('/chapter/?', function($request) {
 
   $chapterFiles = $chapterDao->selectResourcesFromChapter($chapter)['body'];
 
-  
+  $realPath = 'files/';
   if(!empty($chapterFiles)){
-    $realPath= $realPath.'documents/';
     foreach($chapterFiles as $chapterFile){
-      $realPath = $realPath.$chapterFile['server_name'];
+      $realPath = $realPath.'documents/'.$chapterFile['server_name'];
       unlink($realPath);
     }
   }
