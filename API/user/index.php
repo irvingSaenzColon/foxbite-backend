@@ -10,6 +10,7 @@ require '../../vendor/autoload.php';
 include_once('../../model/Request.php');
 include_once('../../model/Router.php');
 include_once('../../dao/UserDAO.php');
+include_once('../../dao/CourseProgressDAO.php');
 
 $dotenv = Dotenv\Dotenv::createImmutable('../../');
 $dotenv->safeLoad();

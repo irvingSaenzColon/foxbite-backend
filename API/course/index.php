@@ -116,7 +116,8 @@ $router->post('/course', function($request) {
 
   $body = $request->getBody();
   $categories = $body['categories'];
-  
+  $response = [];
+
   $body['status'] = $body['status'] === 'active' ? 1 : 0;
   list($type, $data) = explode(';', $body['cover']);
   preg_match("/\/(.*?);/", $body['cover'], $matches);
@@ -125,6 +126,14 @@ $router->post('/course', function($request) {
   $course = new Course(0, $body['title'], $body['description'], floatval($body['price']), 0, $coverImage, $matches[1], $body['status'], null, null, $body['createdBy'] );
   
   $courseDAO = new CourseDAO();
+
+  $response = $courseDAO->selectCourseTitleByUser($course);
+  if(!empty($response['body'])){
+    $response['status'] = 400;
+    http_response_code(400);
+    return json_encode($response);
+  }
+
   $courseDAO->insertCourse($course);
 
   $response = $courseDAO->selectLastCourseCreatedBy($course);
@@ -177,6 +186,16 @@ $router->patch('/course', function($request) {
   $course = new Course($body['id'], $body['title'], $body['description'], floatval($body['price']), 0, $coverImage, $matches[1], $body['status'], null, null, $body['createdBy'] );
 
   $courseDAO = new CourseDAO();
+
+  $response = $courseDAO->selectCourseTitleByUser($course);
+  if(!empty($response['body'])){
+    if($response['body']['course_id'] !== $course->getId()){
+      $response['status'] = 400;
+      http_response_code(400);
+      return json_encode($response);
+    }
+  }
+
   $courseDAO->updateCourse($course);
 
   foreach($categories_deleted as $category_id){

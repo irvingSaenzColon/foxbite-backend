@@ -95,14 +95,23 @@ $router->get('/category/info', function($request) {
 $router->post('/category', function($request) {
 
   $body = $request->getBody();
+  $response = [];
 
   list($type, $data) = explode(';', $body['categoryCover']);
   preg_match("/\/(.*?);/", $body['categoryCover'], $matches);
   $coverImage = base64_encode($data);
 
-  $cateoryDAO = new CategoryDAO();
-
   $category = new Category(0, $body['categoryTitle'], $body['categoryDescription'], $coverImage, $matches[1], $body['categoryCreatedBy']);
+
+  $cateoryDAO = new CategoryDAO();
+  $response = $cateoryDAO->selectCategoryTitle($category);
+
+  if(!empty($response['body'])){
+    $response['status'] = 400;
+    http_response_code(400);
+    return json_encode($response);
+  }
+
   $cateoryDAO->insertCategory($category);
 
   $response = $cateoryDAO->selectLastCategoryCreatedBy($category->getCreatedBy());
@@ -117,18 +126,29 @@ $router->put('/category', function($request) {
   $body = $request->getBody();
 
   
-  return json_encode('');
+  return json_encode('hola');
 });
 
 $router->patch('/category', function($request) {
   $body = $request->getBody();
+  $response = [];
+
   list($type, $data) = explode(';', $body['categoryCover']);
   preg_match("/\/(.*?);/", $body['categoryCover'], $matches);
   $coverImage = base64_encode($data);
 
-  $categoryDAO = new CategoryDAO();
-
   $category = new Category($body['categoryId'], $body['categoryTitle'], $body['categoryDescription'], $coverImage, $matches[1], $body['categoryCreatedBy']);
+
+  $categoryDAO = new CategoryDAO();
+  $response = $categoryDAO->selectCategoryTitle($category);
+
+  if(!empty($response['body'])){
+    if(intval($response['body']['category_id']) !== $category->getId()){
+      $response['status'] = 400;
+      http_response_code(400);
+      return json_encode($response);
+    }
+  }
 
   $categoryDAO->updateCategory($category, $body['option']);
 

@@ -12,5 +12,6 @@ interface CategoryCRUD{
 
     public function selectCategoriesFromCourse(Course $course);
     public function selectCategoriesInfo();
+    public function selectCategoryTitle(Category $category);
 }
 ?>

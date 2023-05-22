@@ -1,11 +1,10 @@
 <?php
-include_once '../../interface/CategoryCRUD.php';
+include_once '../../interface/CourseProgressCRUD.php';
 include_once '../../configuration/DataBaseHelper.php';
 
- class CategoryDAO implements CategoryCRUD{
-
-    public function selectAll(){
-        $query = "CALL sp_basic_category_crud( ?, ?, ?, ?, ?, ?, ?);";
+ class CourseProgressDAO implements CourseProgressCRUD{
+    public function selectAll(CourseProgress $courseProgress){
+        $query = "CALL sp_basic_diploma_progress_actions(?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -13,9 +12,8 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( 0, null, null, null, null, null, 'A') );
+            $statement->execute(array( $courseProgress->getId(), $courseProgress->getSeen(), $courseProgress->getTime(), $courseProgress->getCourseId(), $courseProgress->getChapterId(), $courseProgress->getUserId(), 'SA') );
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-
         }
         catch(PDOException $error){
             $connection->closeConnection();
@@ -38,9 +36,9 @@ include_once '../../configuration/DataBaseHelper.php';
             );
         }
     }
-
-    public function selectCategory(int $id){
-        $query = "CALL sp_basic_category_crud( ?, ?, ?, ?, ?, ?, ?);";
+    
+    public function select(CourseProgress $courseProgress){
+        $query = "CALL sp_basic_diploma_progress_actions(?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -48,9 +46,8 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( $id, null, null, null, null, null, 'S') );
+            $statement->execute(array( $courseProgress->getId(), $courseProgress->getSeen(), $courseProgress->getTime(), $courseProgress->getCourseId(), $courseProgress->getChapterId(), $courseProgress->getUserId(), 'SE') );
             $result = $statement->fetch(PDO::FETCH_ASSOC);
-
         }
         catch(PDOException $error){
             $connection->closeConnection();
@@ -74,8 +71,8 @@ include_once '../../configuration/DataBaseHelper.php';
         }
     }
 
-    public function selectLastCategoryCreatedBy($id){
-        $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
+    public function insert(CourseProgress $courseProgress){
+        $query = "CALL sp_basic_diploma_progress_actions(?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -83,9 +80,8 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( null, null, null, null, null, $id, 'L') );
+            $statement->execute(array( $courseProgress->getId(), $courseProgress->getSeen(), $courseProgress->getTime(), $courseProgress->getCourseId(), $courseProgress->getChapterId(), $courseProgress->getUserId(), 'I') );
             $result = $statement->fetch(PDO::FETCH_ASSOC);
-
         }
         catch(PDOException $error){
             $connection->closeConnection();
@@ -109,8 +105,8 @@ include_once '../../configuration/DataBaseHelper.php';
         }
     }
 
-    public function selectCategoryFromUser(Category $Category){
-        $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
+    public function update(CourseProgress $courseProgress){
+        $query = "CALL sp_basic_diploma_progress_actions(?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -118,9 +114,8 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( null, null, null, null, null, null, 'S') );
+            $statement->execute(array( $courseProgress->getId(), $courseProgress->getSeen(), $courseProgress->getTime(), $courseProgress->getCourseId(), $courseProgress->getChapterId(), $courseProgress->getUserId(), 'U') );
             $result = $statement->fetch(PDO::FETCH_ASSOC);
-
         }
         catch(PDOException $error){
             $connection->closeConnection();
@@ -144,8 +139,8 @@ include_once '../../configuration/DataBaseHelper.php';
         }
     }
 
-    public function insertCategory(Category $category){
-        $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
+    public function delete(CourseProgress $courseProgress){
+        $query = "CALL sp_basic_diploma_progress_actions(?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -153,9 +148,8 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( 0, $category->getTitle(), $category->getDescription(), $category->getCover(), $category->getExtension(), $category->getCreatedBy(), 'I') );
+            $statement->execute(array( $courseProgress->getId(), $courseProgress->getSeen(), $courseProgress->getTime(), $courseProgress->getCourseId(), $courseProgress->getChapterId(), $courseProgress->getUserId(), 'D') );
             $result = $statement->fetch(PDO::FETCH_ASSOC);
-
         }
         catch(PDOException $error){
             $connection->closeConnection();
@@ -179,8 +173,8 @@ include_once '../../configuration/DataBaseHelper.php';
         }
     }
 
-    public function updateCategory(Category $category, string $option){
-        $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
+    public function updateDetail(CourseProgress $courseProgress){
+        $query = "CALL sp_basic_diploma_progress_actions(?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -188,9 +182,8 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( $category->getId(), $category->getTitle(), $category->getDescription(), $category->getCover(), $category->getExtension(), $category->getCreatedBy(), $option) );
+            $statement->execute(array( $courseProgress->getId(), $courseProgress->getSeen(), $courseProgress->getTime(), $courseProgress->getCourseId(), $courseProgress->getChapterId(), $courseProgress->getUserId(), 'UD') );
             $result = $statement->fetch(PDO::FETCH_ASSOC);
-
         }
         catch(PDOException $error){
             $connection->closeConnection();
@@ -214,8 +207,8 @@ include_once '../../configuration/DataBaseHelper.php';
         }
     }
 
-    public function deleteCategory(Category $category){
-        $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
+    public function selectLastChapterSeen(CourseProgress $courseProgress){
+        $query = "CALL sp_basic_diploma_progress_actions(?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -223,9 +216,8 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( $category->getId(), null, null, null, null, null, 'D') );
+            $statement->execute(array( $courseProgress->getId(), $courseProgress->getSeen(), $courseProgress->getTime(), $courseProgress->getCourseId(), $courseProgress->getChapterId(), $courseProgress->getUserId(), 'SLC') );
             $result = $statement->fetch(PDO::FETCH_ASSOC);
-
         }
         catch(PDOException $error){
             $connection->closeConnection();
@@ -249,8 +241,8 @@ include_once '../../configuration/DataBaseHelper.php';
         }
     }
 
-    public function selectCategoriesFromCourse(Course $course){
-        $query = "CALL sp_bind_course_category(?, ?, ?, ?);";
+    public function updateDiplomaFinished(CourseProgress $courseProgress){
+        $query = "CALL sp_basic_diploma_progress_actions(?, ?, ?, ?, ?, ?, ?);";
         $result = [];
         try{
             $connection = new DataBaseHelper();
@@ -258,9 +250,42 @@ include_once '../../configuration/DataBaseHelper.php';
 
             $statement = $con->prepare($query);
 
-            $statement->execute(array( 0, null, $course->getId(), 'S') );
+            $statement->execute(array( $courseProgress->getId(), $courseProgress->getSeen(), $courseProgress->getTime(), $courseProgress->getCourseId(), $courseProgress->getChapterId(), $courseProgress->getUserId(), 'UF') );
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(PDOException $error){
+            $connection->closeConnection();
+            $con = null;
+
+            return array(
+                'body' => '',
+                'message' => 'Hubo un error durante la conexión '.$error,
+                'status' => 500
+            );
+        }
+        finally{
+            $connection->closeConnection();
+            $con = null;
+
+            return array(
+                'body' => $result,
+                'message' => '',
+                'status' => 200
+            );
+        }
+    }
+
+    public function selectUserProgress(CourseProgress $courseProgress, $visible, $category, $dateInit, $dateEnd, $finished){
+        $query = "CALL sp_progress(?, ?, ?, ?, ?, ?);";
+        $result = [];
+        try{
+            $connection = new DataBaseHelper();
+            $con = $connection->getConnection();
+
+            $statement = $con->prepare($query);
+
+            $statement->execute(array( $courseProgress->getUserId(), $visible, $category, $dateInit, $dateEnd, $finished) );
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-
         }
         catch(PDOException $error){
             $connection->closeConnection();
@@ -283,76 +308,5 @@ include_once '../../configuration/DataBaseHelper.php';
             );
         }
     }
-
-    public function selectCategoriesInfo(){
-        $query = "CALL sp_bind_course_category(?, ?, ?, ?);";
-        $result = [];
-        try{
-            $connection = new DataBaseHelper();
-            $con = $connection->getConnection();
-
-            $statement = $con->prepare($query);
-
-            $statement->execute(array( 0, null, null, 'G') );
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        }
-        catch(PDOException $error){
-            $connection->closeConnection();
-            $con = null;
-
-            return array(
-                'body' => '',
-                'message' => 'Hubo un error durante la conexión '.$error,
-                'status' => 500
-            );
-        }
-        finally{
-            $connection->closeConnection();
-            $con = null;
-
-            return array(
-                'body' => $result,
-                'message' => '',
-                'status' => 200
-            );
-        }
-    }
-
-    public function selectCategoryTitle(Category $category){
-        $query = "CALL sp_basic_category_crud(?, ?, ?, ?, ?, ?, ?);";
-        $result = [];
-        try{
-            $connection = new DataBaseHelper();
-            $con = $connection->getConnection();
-
-            $statement = $con->prepare($query);
-
-            $statement->execute(array( 0, $category->getTitle(), $category->getDescription(), $category->getCover(), $category->getExtension(), $category->getCreatedBy(), 'SCT') );
-            $result = $statement->fetch(PDO::FETCH_ASSOC);
-
-        }
-        catch(PDOException $error){
-            $connection->closeConnection();
-            $con = null;
-
-            return array(
-                'body' => '',
-                'message' => 'Hubo un error durante la conexión '.$error,
-                'status' => 500
-            );
-        }
-        finally{
-            $connection->closeConnection();
-            $con = null;
-
-            return array(
-                'body' => $result,
-                'message' => '',
-                'status' => 200
-            );
-        }
-    }
+    
  }
-
- ?>

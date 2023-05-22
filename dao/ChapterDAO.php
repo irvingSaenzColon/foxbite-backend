@@ -562,4 +562,40 @@ include_once '../../configuration/DataBaseHelper.php';
             );
         }
     }
+
+
+    public function selectChapterTitleFromCourse(Chapter $chapter){
+        $query = "CALL sp_basic_chapter_actions( ?, ?, ?, ?, ?, ?, ?);";
+        $result = [];
+        try{
+            $connection = new DataBaseHelper();
+            $con = $connection->getConnection();
+
+            $statement = $con->prepare($query);
+
+            $statement->execute(array( $chapter->getId(), $chapter->getTitle(), $chapter->getDescription(), $chapter->getCost(), $chapter->getCourseId(), null, 'SCT') );
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        }
+        catch(PDOException $error){
+            $connection->closeConnection();
+            $con = null;
+
+            return array(
+                'body' => '',
+                'message' => 'Hubo un error durante la conexión '.$error,
+                'status' => 500
+            );
+        }
+        finally{
+            $connection->closeConnection();
+            $con = null;
+
+            return array(
+                'body' => $result,
+                'message' => '',
+                'status' => 200
+            );
+        }
+    }
  }

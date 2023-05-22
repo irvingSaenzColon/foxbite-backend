@@ -19,5 +19,7 @@ interface ChapterCRUD{
     public function updateVideoFromChapter(Chapter $chapter);
     public function deleteChapterResource(Chapter $chapter);
     public function deleteChapterLink(Chapter $chapter);
+
+    public function selectChapterTitleFromCourse(Chapter $chapter);
 }
 ?>

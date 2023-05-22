@@ -94,7 +94,14 @@ $router->post('/chapter', function($request) {
     ), null, null);
 
     $chapterDao = new ChapterDAO();
+    $response = $chapterDao->selectChapterTitleFromCourse($chapter);
    if($option == 'I'){
+    
+    if(!empty($response['body'])){
+      $response['status'] = 400;
+      http_response_code(400);
+      return json_encode($response);
+    }
 
     $chapterDao->insertChapter($chapter);
 
@@ -257,6 +264,25 @@ $router->get('/chapter/comments/?', function($request) {
 
 });
 
+$router->post('/chapter/check', function($request) {
+  $response = [];
+  $body = $request->getBody();
+  $option = $body['option'];
+
+  $chapter = new Chapter($body['id'], $body['courseId'],$body['userId'], $body['title'], null, null, null, null, null);
+
+  $chapterDao = new ChapterDAO();
+  $response = $chapterDao->selectChapterTitleFromCourse($chapter);
+
+  if($option === 'I' && !empty($response['body'])){
+    $response['status'] = 400;
+  }else if ($option === 'U' && intval($response['body']['id']) !== intval($chapter->getId())){
+    $response['status'] = 400;
+  }
+
+  http_response_code($response['status']);
+  return json_encode($response);
+});
 
 $router->delete('/chapter/?', function($request) {
   $idPattern = '/[0-9]+$/';

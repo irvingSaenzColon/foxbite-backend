@@ -17,5 +17,7 @@ interface CourseCRUD{
     public function selectBestCourses();
     public function selectCourseVideos(Course $course);
     public function selectCourseFiles(Course $course);
+
+    public function selectCourseTitleByUser(Course $course);
 }
 ?>
