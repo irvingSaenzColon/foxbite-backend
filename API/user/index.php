@@ -85,6 +85,29 @@ $router->post('/user', function($request) {
   return json_encode($response);
 });
 
+$router->post('/user/lastseen', function($request) {
+
+  $body = $request->getBody();
+  $userDAO = new UserDAO();
+  $response  = [];
+
+  $user = new User($body['userId'], null, null, null, null, null, null, null, null, null, null, null, null);
+  $userDAO = new UserDAO();
+  $response = $userDAO->selectLastChapterSeen($user);
+
+  $courseLastSeenData = [];
+
+  foreach($response['body'] as $courseSeenData){
+    $courseSeenData['cover'] = base64_decode($courseSeenData['cover']);
+    array_push($courseLastSeenData, $courseSeenData);
+  }
+
+  $response['body'] = $courseLastSeenData;
+
+  http_response_code($response['status']);
+  return json_encode($response);
+});
+
 $router->put('/user', function($request) {
   $body = $request->getBody();
   $userDAO = new UserDAO();

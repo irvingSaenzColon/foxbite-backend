@@ -90,10 +90,10 @@ $router->put('/progress/detail', function($request) {
     $courseProgressDAO = new CourseProgressDAO();
     $response = $courseProgressDAO->updateDetail($courseProgress);
 
-    if($response['body']['result'] === '1')
-        $response['body'] = true;
-    else
-        $response['body'] = false;
+    // if($response['body']['result'] === '1')
+    //     $response['body'] = true;
+    // else
+    //     $response['body'] = false;
 
     http_response_code($response['status']);
     return json_encode($response);

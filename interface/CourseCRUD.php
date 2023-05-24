@@ -15,6 +15,7 @@ interface CourseCRUD{
     public function selectCourseAdvanced($title, $category, $teacher, $beginDate, $endDate);
     public function selectLatestCourses();
     public function selectBestCourses();
+    public function selectSellersCourses();
     public function selectCourseVideos(Course $course);
     public function selectCourseFiles(Course $course);
 

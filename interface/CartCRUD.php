@@ -9,5 +9,8 @@ interface CartCRUD{
     public function delete(Cart $cart);
 
     public function insertDetail(Cart $cart);
+    public function deleteDetail(Cart $cart);
+    public function clearDetail(Cart $cart);
+    public function selectCartItemsBuy(Cart $cart);
 }
 ?>

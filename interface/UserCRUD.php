@@ -10,5 +10,6 @@ interface UserCRUD{
     public function deleteUser(User $userParam);
 
     public function selectUserInstructors();
+    public function selectLastChapterSeen(User $user);
 }
 ?>
